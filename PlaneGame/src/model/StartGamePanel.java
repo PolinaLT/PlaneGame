@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.lang.management.PlatformLoggingMXBean;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -19,11 +20,11 @@ import javax.swing.Timer;
 
 public class StartGamePanel extends JPanel {
 	public BufferedImage image;
-	int xPosition = 10;
-	int yPosition = 10;
+	int xPosition = 500;
+	int yPosition = 300;
 	private final int planeLength = 15;
 	private final int planeWight = 15;
-	private ImageIcon planeIcon = new ImageIcon("D:/workspace/PlaneGame/resources/plane3.png");
+	private ImageIcon planeIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/plane3.png");
 	private Image plane;
 	int cloud = 900;
 	
@@ -33,6 +34,8 @@ public class StartGamePanel extends JPanel {
 		addKeyListener(listener);
 		setFocusable(true);
 		drawCloud();
+		
+		
 	}
 	
 	public void start() {
@@ -53,22 +56,41 @@ public class StartGamePanel extends JPanel {
 	}
 	
 	private void drawCloud() {
+		BarrierHandler handler = new BarrierHandler();
+		List<Barrier> barrierList = handler.createBarrierList();
 		Timer timer = new Timer(5, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start();
 				Graphics2D g = (Graphics2D) image.getGraphics();
-				System.out.println("@");
-				g.setColor(Color.YELLOW);
-				g.drawOval(cloud, 90, 50, 50);
-				g.fillOval(cloud, 90, 50, 50);
-				cloud -= 5;
-				plane = planeIcon.getImage();
-				g.drawImage(plane, xPosition, yPosition, null);
+				
+				drawPlane();
+				
+				for (int i = 0; i < barrierList.size(); i++) {
+					Barrier barrier = barrierList.get(i);
+					BarrierEnum barrierEnum = barrier.getType();
+					
+					switch (barrierEnum) {
+					case BONUS:
+						g.setColor(Color.WHITE);
+						break;
+					case LIGHTNING:
+						g.setColor(Color.YELLOW);
+						break;
+					case PLANE:
+						g.setColor(Color.BLUE);
+						break;
+					}
+					
+					g.drawRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
+					g.fillRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
+				}
+				handler.changeLocation();
 				repaint();
 			}
 		});
 		timer.start();
 	}
+	
 	
 	private void drawPlane() {
 		start();
@@ -81,8 +103,9 @@ public class StartGamePanel extends JPanel {
 			//g.drawRect(xPosition, yPosition, planeLength, planeWight);
 			//g.fillRect(xPosition, yPosition, planeLength, planeWight);
 			//g.drawLine(xPosition, yPosition, xPosition + planeLength, yPosition);
-			
-			//repaint();
+			plane = planeIcon.getImage();
+			g.drawImage(plane, xPosition, yPosition, null);
+			repaint();
 		}
 	}
 	
@@ -103,22 +126,10 @@ public class StartGamePanel extends JPanel {
 			int keyCode = e.getKeyCode();
 			switch (keyCode) {
 			case KeyEvent.VK_UP:
-				System.out.println("UP");
-				yPosition -= 5;	
-				//drawPlane();
+				yPosition -= 10;	
 				break;
 			case KeyEvent.VK_DOWN:
-				System.out.println("DOWN");
-				yPosition += 5;
-				//drawPlane();
-				break;
-			
-			case KeyEvent.VK_RIGHT:
-				System.out.println("RIGHT");
-				xPosition = xPosition + 5;
-				//start();
-				//drawPlane();
-				
+				yPosition += 10;
 				break;
 			default:
 				break;

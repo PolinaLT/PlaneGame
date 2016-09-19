@@ -1,22 +1,36 @@
 package model;
 
+import java.util.Random;
+
+
 public class Barrier {
-	private BarrierEnum type;
+	private BarrierEnum barrierType;
 	private int xLocation;
 	private int yLocation;
 	
 	public Barrier() {
-		//xLoacation = 1000;
-		//yLocation = 
-		//RANDOOOOOOOOOOOOM
+		Random randomGenerator = new Random();
+		yLocation = randomGenerator.nextInt(700);
+		xLocation = randomGenerator.nextInt(99001) + 1;
+		int type = randomGenerator.nextInt(3);
+		switch (type) {
+		case 0:
+			barrierType = BarrierEnum.BONUS;
+			break;
+		case 1:
+			barrierType = BarrierEnum.PLANE;
+			break;
+		case 2: 
+			barrierType = BarrierEnum.LIGHTNING;
+			break;
+		default:
+			break;
+		}
 	}
 	
-	public void setType(BarrierEnum type) {
-		this.type = type;
-	}
 	
 	public BarrierEnum getType() {
-		return this.type;
+		return this.barrierType;
 	}
 	
 	public void setXLocation(int x) {
