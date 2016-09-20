@@ -27,6 +27,8 @@ public class StartGamePanel extends JPanel {
 	private ImageIcon planeIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/plane3.png");
 	private Image plane;
 	int cloud = 900;
+	private GameStatus gameStatus = GameStatus.PLAY;
+	private Timer timer;
 	
 	public StartGamePanel() {
 		image = new BufferedImage(1000, 700, BufferedImage.TYPE_4BYTE_ABGR);
@@ -58,7 +60,7 @@ public class StartGamePanel extends JPanel {
 	private void drawCloud() {
 		BarrierHandler handler = new BarrierHandler();
 		List<Barrier> barrierList = handler.createBarrierList();
-		Timer timer = new Timer(5, new ActionListener() {
+		timer = new Timer(5, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start();
 				Graphics2D g = (Graphics2D) image.getGraphics();
@@ -84,13 +86,29 @@ public class StartGamePanel extends JPanel {
 					g.drawRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
 					g.fillRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
 				}
-				handler.changeLocation();
-				repaint();
+				
+				//System.out.println(gameStatus);
+				gameStatus = handler.checkStatus(xPosition, yPosition);
+				//System.out.println(gameStatus);
+				if (gameStatus == GameStatus.PLAY) {
+					handler.changeLocation();
+					repaint();
+				}
+				else {
+					stopTimer(timer);
+					return;
+				}
 			}
 		});
 		timer.start();
+		if (gameStatus != GameStatus.PLAY) {
+			timer.stop();
+		}
 	}
 	
+	private void stopTimer(Timer time) {
+		time.stop();
+	}
 	
 	private void drawPlane() {
 		start();
