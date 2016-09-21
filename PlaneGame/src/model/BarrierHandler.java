@@ -9,9 +9,9 @@ public class BarrierHandler {
 	private List<Barrier> barrierList = new ArrayList<>();
 	private List<Barrier> workList = new ArrayList<>();
 	private int numberOfBarriers;
-	Barrier barrier;
-	GameStatus gameStatus = GameStatus.PLAY;
-	int winStatus = 0;
+	private Barrier barrier;
+	private GameStatus gameStatus = GameStatus.PLAY;
+	private int winStatus = 0;
 	
 	public BarrierHandler() {
 		
@@ -38,7 +38,7 @@ public class BarrierHandler {
 		}*/
 		for (numberOfBarriers = 0; numberOfBarriers < 500; numberOfBarriers++) {
 			barrier = barrierList.get(numberOfBarriers);
-			barrier.setXLocation(1);
+			barrier.setXLocation();
 			workList.add(barrier);
 			//System.out.println(barrier.getType() + " " + barrier.getXLocation() + " " + barrier.getYLocation());
 		}

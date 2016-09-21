@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.lang.management.PlatformLoggingMXBean;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -19,25 +20,30 @@ import javax.swing.Timer;
 
 
 public class StartGamePanel extends JPanel {
-	public BufferedImage image;
-	int xPosition = 500;
-	int yPosition = 300;
+	private BufferedImage image;
+	private int xPosition = 500;
+	private int yPosition = 300;
 	private final int planeLength = 15;
 	private final int planeWight = 15;
 	private ImageIcon planeIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/plane3.png");
 	private Image plane;
-	int cloud = 900;
+	private int cloud = 900;
 	private GameStatus gameStatus = GameStatus.PLAY;
 	private Timer timer;
+	private GameStatus status;
 	
 	public StartGamePanel() {
 		image = new BufferedImage(1000, 700, BufferedImage.TYPE_4BYTE_ABGR);
 		KeyHandler listener = new KeyHandler();
 		addKeyListener(listener);
 		setFocusable(true);
-		drawCloud();
 		
+	}
+	
+	
+	public GameStatus report() {
 		
+		return gameStatus;
 	}
 	
 	public void start() {
@@ -57,11 +63,16 @@ public class StartGamePanel extends JPanel {
 		System.out.println("Game Over");
 	}
 	
-	private void drawCloud() {
+	
+	
+	public void drawCloud() {
 		BarrierHandler handler = new BarrierHandler();
 		List<Barrier> barrierList = handler.createBarrierList();
-		timer = new Timer(5, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		java.util.Timer utilTimer = new java.util.Timer();
+		utilTimer.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
 				start();
 				Graphics2D g = (Graphics2D) image.getGraphics();
 				
@@ -88,22 +99,20 @@ public class StartGamePanel extends JPanel {
 				}
 				
 				//System.out.println(gameStatus);
-				gameStatus = handler.checkStatus(xPosition, yPosition);
+				
 				//System.out.println(gameStatus);
 				if (gameStatus == GameStatus.PLAY) {
 					handler.changeLocation();
 					repaint();
+					gameStatus = handler.checkStatus(xPosition, yPosition);
 				}
 				else {
-					stopTimer(timer);
-					return;
+					utilTimer.cancel();
 				}
+				
 			}
-		});
-		timer.start();
-		if (gameStatus != GameStatus.PLAY) {
-			timer.stop();
-		}
+		}, 0, 15);
+		
 	}
 	
 	private void stopTimer(Timer time) {

@@ -33,16 +33,16 @@ public class Barrier {
 		return this.barrierType;
 	}
 	
-	public void setXLocation(int x) {
-		xLocation -= x;		
+	public void setXLocation() {
+		xLocation --;		
 	}
 	
 	public int getXLocation() {
 		return xLocation;
 	}
 	
-	public void setYLocation(int y) {
-		yLocation -= y;		
+	public void setYLocation() {
+		yLocation --;		
 	}
 	
 	public int getYLocation() {

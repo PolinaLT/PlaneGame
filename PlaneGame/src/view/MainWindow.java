@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class MainWindow extends JPanel {
-	JFrame mainFrame = new JFrame("Plane");
-	JPanel mainPanel = new JPanel();
-	JPanel menuPanel = new JPanel();
+	private JFrame mainFrame = new JFrame("Plane");
+	private JPanel mainPanel = new JPanel();
+	private JPanel menuPanel = new JPanel();
 	
 	public MainWindow() {
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
