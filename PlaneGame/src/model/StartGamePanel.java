@@ -31,6 +31,7 @@ public class StartGamePanel extends JPanel {
 	private GameStatus gameStatus = GameStatus.PLAY;
 	private Timer timer;
 	private GameStatus status;
+	private int plusXBarrier = 0;
 	
 	public StartGamePanel() {
 		image = new BufferedImage(1000, 700, BufferedImage.TYPE_4BYTE_ABGR);
@@ -63,11 +64,17 @@ public class StartGamePanel extends JPanel {
 		System.out.println("Game Over");
 	}
 	
-	
+	private void drawBarrier(List<Barrier> barrierList) {
+		
+	}
 	
 	public void drawCloud() {
 		BarrierHandler handler = new BarrierHandler();
-		List<Barrier> barrierList = handler.createBarrierList();
+		
+		List<Barrier> bonusList = handler.createBonusList();
+		List<Barrier> planeList = handler.createPlaneList();
+		List<Barrier> lightningList = handler.createLightningList();
+		
 		timer = new Timer(5, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start();
@@ -95,9 +102,7 @@ public class StartGamePanel extends JPanel {
 					g.fillRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
 				}
 				
-				//System.out.println(gameStatus);
 				gameStatus = handler.checkStatus(xPosition, yPosition);
-				//System.out.println(gameStatus);
 				if (gameStatus == GameStatus.PLAY) {
 					handler.changeLocation();
 					repaint();
@@ -159,6 +164,8 @@ public class StartGamePanel extends JPanel {
 			case KeyEvent.VK_DOWN:
 				yPosition += 10;
 				break;
+			case KeyEvent.VK_RIGHT:
+				
 			default:
 				break;
 			}
