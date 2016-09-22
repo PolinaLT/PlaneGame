@@ -30,12 +30,7 @@ public class BarrierHandler {
 	}
 	
 	public List<Barrier> changeLocation() {
-		/*Iterator<Barrier> iterator = barrierList.iterator();
-		while (iterator.hasNext()) {
-			barrier = iterator.next();
-			barrier.setXLocation(5);
-			
-		}*/
+		
 		for (numberOfBarriers = 0; numberOfBarriers < 500; numberOfBarriers++) {
 			barrier = barrierList.get(numberOfBarriers);
 			barrier.setXLocation();

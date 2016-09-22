@@ -68,11 +68,8 @@ public class StartGamePanel extends JPanel {
 	public void drawCloud() {
 		BarrierHandler handler = new BarrierHandler();
 		List<Barrier> barrierList = handler.createBarrierList();
-		java.util.Timer utilTimer = new java.util.Timer();
-		utilTimer.scheduleAtFixedRate(new TimerTask() {
-			
-			@Override
-			public void run() {
+		timer = new Timer(5, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				start();
 				Graphics2D g = (Graphics2D) image.getGraphics();
 				
@@ -99,19 +96,23 @@ public class StartGamePanel extends JPanel {
 				}
 				
 				//System.out.println(gameStatus);
-				
+				gameStatus = handler.checkStatus(xPosition, yPosition);
 				//System.out.println(gameStatus);
 				if (gameStatus == GameStatus.PLAY) {
 					handler.changeLocation();
 					repaint();
-					gameStatus = handler.checkStatus(xPosition, yPosition);
 				}
 				else {
-					utilTimer.cancel();
+					stopTimer(timer);
+					
+					return;
 				}
-				
 			}
-		}, 0, 15);
+		});
+		timer.start();
+		if (gameStatus != GameStatus.PLAY) {
+			timer.stop();
+		}
 		
 	}
 	
