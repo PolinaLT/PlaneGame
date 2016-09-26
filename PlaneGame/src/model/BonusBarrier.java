@@ -1,19 +1,25 @@
 package model;
 
+import java.awt.Color;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
 
 public class BonusBarrier implements Barrier {
 	private int yLocation;
 	private int xLocation;
 	private Random randomGenerator = new Random();
+	private Color color;
+	private ImageIcon bonusIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/bonus.png");
 	
-	public BonusBarrier() {
+	public BonusBarrier(int length) {
 		yLocation = randomGenerator.nextInt(700);
-		xLocation = randomGenerator.nextInt(99001) + 1;
+		xLocation = randomGenerator.nextInt(length) + 1;
+		color = Color.BLUE;
 	}
 
 	public void setXLocation() {
-		xLocation -= 2;
+		xLocation -= 4;
 	}
 
 	public int getXLocation() {
@@ -24,7 +30,13 @@ public class BonusBarrier implements Barrier {
 		return yLocation;
 	}
 
+	public Color getColor() {
+		return color;
+	}
 	
+	public ImageIcon getIcon() {
+		return bonusIcon;
+	}
 	
 	
 }

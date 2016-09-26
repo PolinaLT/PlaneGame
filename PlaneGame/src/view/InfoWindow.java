@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,11 +15,13 @@ public class InfoWindow {
 	private JPanel infoPanel = new JPanel();
 	private JLabel infoLabel;
 	
-	public InfoWindow(GameStatus gameStatus) {
+	public InfoWindow(GameStatus gameStatus) throws IOException {
 		
 		switch (gameStatus) {
 		case WIN:
 			infoLabel = new JLabel("WINNER!");
+			LevelWindow.setLevel();
+			break;
 		case LOSS:
 			infoLabel = new JLabel("LOSER!");
 			break;

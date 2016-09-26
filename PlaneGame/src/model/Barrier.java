@@ -1,6 +1,9 @@
 package model;
 
+import java.awt.Color;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
 
 
 public interface Barrier {
@@ -10,4 +13,8 @@ public interface Barrier {
 	int getXLocation();
 		
 	int getYLocation();
+	
+	Color getColor();
+	
+	ImageIcon getIcon();
 }

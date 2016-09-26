@@ -1,19 +1,26 @@
 package model;
 
+import java.awt.Color;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
 
 public class LightningBarrier implements Barrier {
 	private int xLocation;
 	private int yLocation;
 	private Random randomGenerator = new Random();
+	private Color color;
+	private ImageIcon lightningIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/lightning.png");
 	
-	public LightningBarrier() {
+	
+	public LightningBarrier(int length) {
 		yLocation = randomGenerator.nextInt(700);
-		xLocation = randomGenerator.nextInt(99001) + 1;
+		xLocation = randomGenerator.nextInt(length) + 1;
+		color = Color.YELLOW;
 	}
 	
 	public void setXLocation() {
-		xLocation -= 1;
+		xLocation -= 2;
 	}
 
 	public int getXLocation() {
@@ -22,6 +29,14 @@ public class LightningBarrier implements Barrier {
 
 	public int getYLocation() {
 		return yLocation;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
+	public ImageIcon getIcon() {
+		return lightningIcon;
 	}
 
 }

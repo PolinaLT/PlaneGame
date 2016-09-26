@@ -17,8 +17,8 @@ public class Controller {
 		
 	}
 	
-	public void startGame(JFrame gameFrame) {
-		gamePanel = new StartGamePanel();
+	public void startGame(JFrame gameFrame, int level) {
+		gamePanel = new StartGamePanel(level);
 		gameFrame.add(gamePanel);
 		gamePanel.drawCloud();
 	}

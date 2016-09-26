@@ -23,17 +23,18 @@ public class StartGamePanel extends JPanel {
 	private BufferedImage image;
 	private int xPosition = 500;
 	private int yPosition = 300;
-	private final int planeLength = 15;
-	private final int planeWight = 15;
 	private ImageIcon planeIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/plane3.png");
 	private Image plane;
+	private Image barrierImage;
 	private int cloud = 900;
 	private GameStatus gameStatus = GameStatus.PLAY;
 	private Timer timer;
 	private GameStatus status;
 	private int plusXBarrier = 0;
+	private int level;
 	
-	public StartGamePanel() {
+	public StartGamePanel(int level) {
+		this.level = level;
 		image = new BufferedImage(1000, 700, BufferedImage.TYPE_4BYTE_ABGR);
 		KeyHandler listener = new KeyHandler();
 		addKeyListener(listener);
@@ -65,7 +66,15 @@ public class StartGamePanel extends JPanel {
 	}
 	
 	private void drawBarrier(List<Barrier> barrierList) {
-		
+		Graphics2D g = (Graphics2D) image.getGraphics();
+		for (int i = 0; i < barrierList.size(); i++) {
+			Barrier barrier = barrierList.get(i);
+			barrierImage = barrier.getIcon().getImage();
+			g.drawImage(barrierImage, barrier.getXLocation(), barrier.getYLocation(), null);
+			/*g.setColor(barrier.getColor());	
+			g.drawRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
+			g.fillRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);*/
+		}
 	}
 	
 	public void drawCloud() {
@@ -75,34 +84,10 @@ public class StartGamePanel extends JPanel {
 		List<Barrier> planeList = handler.createPlaneList();
 		List<Barrier> lightningList = handler.createLightningList();
 		
-		timer = new Timer(5, new ActionListener() {
+		timer = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start();
-				Graphics2D g = (Graphics2D) image.getGraphics();
 				
-				drawPlane();
-				
-				for (int i = 0; i < barrierList.size(); i++) {
-					Barrier barrier = barrierList.get(i);
-					BarrierEnum barrierEnum = barrier.getType();
-					
-					switch (barrierEnum) {
-					case BONUS:
-						g.setColor(Color.WHITE);
-						break;
-					case LIGHTNING:
-						g.setColor(Color.YELLOW);
-						break;
-					case PLANE:
-						g.setColor(Color.BLUE);
-						break;
-					}
-					
-					g.drawRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
-					g.fillRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
-				}
-				
-				gameStatus = handler.checkStatus(xPosition, yPosition);
 				if (gameStatus == GameStatus.PLAY) {
 					handler.changeLocation();
 					repaint();
@@ -112,6 +97,13 @@ public class StartGamePanel extends JPanel {
 					
 					return;
 				}
+				
+				drawPlane();
+				drawBarrier(bonusList);
+				drawBarrier(planeList);
+				drawBarrier(lightningList);
+				
+				gameStatus = handler.checkStatus(xPosition, yPosition);
 			}
 		});
 		timer.start();
@@ -159,10 +151,10 @@ public class StartGamePanel extends JPanel {
 			int keyCode = e.getKeyCode();
 			switch (keyCode) {
 			case KeyEvent.VK_UP:
-				yPosition -= 10;	
+				yPosition -= 20;	
 				break;
 			case KeyEvent.VK_DOWN:
-				yPosition += 10;
+				yPosition += 20;
 				break;
 			case KeyEvent.VK_RIGHT:
 				
