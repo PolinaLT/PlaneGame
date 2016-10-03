@@ -14,7 +14,7 @@ public class BonusBarrier implements Barrier {
 	
 	public BonusBarrier(int length) {
 		yLocation = randomGenerator.nextInt(700);
-		xLocation = randomGenerator.nextInt(length) + 1;
+		xLocation = randomGenerator.nextInt(length) + 1000;
 		color = Color.BLUE;
 	}
 

@@ -28,7 +28,7 @@ public class MainWindow extends JPanel {
 	
 	public JPanel menu() {
 		JButton newGame = new JButton("Играть");
-		JButton results = new JButton("Уровень");
+		JButton results = new JButton("Статистика");
 		JButton exit = new JButton("Правила");
 		
 		JButton[] buttons = {newGame, results, exit};

@@ -26,20 +26,26 @@ public class StartGamePanel extends JPanel {
 	private ImageIcon planeIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/plane3.png");
 	private Image plane;
 	private Image barrierImage;
-	private int cloud = 900;
 	private GameStatus gameStatus = GameStatus.PLAY;
 	private Timer timer;
-	private GameStatus status;
-	private int plusXBarrier = 0;
 	private int level;
+	private int speedUp = 0;
+	private BarrierHandler handler;
+	private List<Barrier> bonusList;
+	private List<Barrier> planeList;
+	private List<Barrier> lightningList;
 	
-	public StartGamePanel(int level) {
-		this.level = level;
+	
+	public StartGamePanel() {
+		
 		image = new BufferedImage(1000, 700, BufferedImage.TYPE_4BYTE_ABGR);
 		KeyHandler listener = new KeyHandler();
 		addKeyListener(listener);
-		setFocusable(true);
-		
+		setFocusable(true);		
+	}
+	
+	public int bonusReport() {
+		return BarrierHandler.bonusReport();
 	}
 	
 	
@@ -60,30 +66,36 @@ public class StartGamePanel extends JPanel {
         g2.setStroke(new BasicStroke(10.0f));
         g2.drawImage(this.image, 0, 0, null);
     }
-
-	private void gameOver() {
-		System.out.println("Game Over");
-	}
 	
 	private void drawBarrier(List<Barrier> barrierList) {
 		Graphics2D g = (Graphics2D) image.getGraphics();
 		for (int i = 0; i < barrierList.size(); i++) {
 			Barrier barrier = barrierList.get(i);
 			barrierImage = barrier.getIcon().getImage();
-			g.drawImage(barrierImage, barrier.getXLocation(), barrier.getYLocation(), null);
-			/*g.setColor(barrier.getColor());	
-			g.drawRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);
-			g.fillRect(barrier.getXLocation(), barrier.getYLocation(), 20, 20);*/
+			g.drawImage(barrierImage, barrier.getXLocation() - speedUp, barrier.getYLocation(), null);
+			speedUp = 0;
 		}
 	}
 	
-	public void drawCloud() {
-		BarrierHandler handler = new BarrierHandler();
+	public void drawCloud(int level) {
+		repaint();
+		this.level = level;
+		handler = new BarrierHandler(level);
+		gameStatus = GameStatus.PLAY;
 		
-		List<Barrier> bonusList = handler.createBonusList();
-		List<Barrier> planeList = handler.createPlaneList();
-		List<Barrier> lightningList = handler.createLightningList();
+		bonusList = handler.createBonusList();
+		planeList = handler.createPlaneList();
+		lightningList = handler.createLightningList();
+		startTimer();
+		timer.start();
+		if (gameStatus != GameStatus.PLAY) {
+			timer.stop();
+			System.out.println("111111111111111111111111111");
+		}
 		
+	}
+	
+	private void startTimer() {
 		timer = new Timer(1, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				start();
@@ -106,14 +118,10 @@ public class StartGamePanel extends JPanel {
 				gameStatus = handler.checkStatus(xPosition, yPosition);
 			}
 		});
-		timer.start();
-		if (gameStatus != GameStatus.PLAY) {
-			timer.stop();
-		}
-		
 	}
 	
 	private void stopTimer(Timer time) {
+		//System.out.println("22222222222222222222222");
 		time.stop();
 	}
 	
@@ -121,32 +129,19 @@ public class StartGamePanel extends JPanel {
 		start();
 		Graphics2D g = (Graphics2D) image.getGraphics();
 		g.setColor(Color.YELLOW);
-		if (xPosition < 0 || xPosition > 1000 || yPosition < 0 || yPosition > 700) {
-			gameOver();
-		}
-		else {
-			//g.drawRect(xPosition, yPosition, planeLength, planeWight);
-			//g.fillRect(xPosition, yPosition, planeLength, planeWight);
-			//g.drawLine(xPosition, yPosition, xPosition + planeLength, yPosition);
 			plane = planeIcon.getImage();
 			g.drawImage(plane, xPosition, yPosition, null);
 			repaint();
-		}
 	}
 	
 	
 	
 	class KeyHandler implements KeyListener {
 
-		
-		
-		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
-
-		@Override
+		
 		public void keyPressed(KeyEvent e) {
 			int keyCode = e.getKeyCode();
 			switch (keyCode) {
@@ -157,7 +152,8 @@ public class StartGamePanel extends JPanel {
 				yPosition += 20;
 				break;
 			case KeyEvent.VK_RIGHT:
-				
+				//speedUp = 20;
+				break;
 			default:
 				break;
 			}
@@ -166,7 +162,6 @@ public class StartGamePanel extends JPanel {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 	}

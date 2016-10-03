@@ -21,50 +21,36 @@ import javax.swing.WindowConstants;
 import controller.Controller;
 
 public class LevelWindow {
-	private String file = "C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt";
 	private static int level;
-	private static String levelString;
-	private JFrame levelFrame = new JFrame("Level");
-	private JPanel levelPanel = new JPanel();
-	private Controller controller = new Controller();
+	private static int bonus;
 	
-	public LevelWindow(JFrame gameFrame) throws IOException {
-		levelFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		levelFrame.setSize(100, 500);
-		
+	public LevelWindow(JFrame gameFrame) throws IOException {		
 		getLevel();
-		for (int i = 0; i < level; i++) {
-			JButton button = new JButton(Integer.toString(i+1));
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					controller.startGame(gameFrame, level);
-				}
-			});
-			levelPanel.add(button);
-		}
-		
-		
-		levelFrame.add(levelPanel);
-		levelFrame.setVisible(true);
 	}
 	
-	public static void setLevel() throws IOException {
+	public static void setLevelBonus(int bonusStatus) throws IOException {
 		List<String> lines = Files.readAllLines(Paths.get("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt"), Charset.defaultCharset());
 		 
         int a = Integer.parseInt(lines.get(0));
  
         int c = a + 1;
+        int b = bonus + bonusStatus;
  
         String text = Integer.toString(c);
+        String textB = Integer.toString(b);
         PrintWriter out = new PrintWriter("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt");
         out.println(text);
+        out.println(textB);
         out.close();
 	}
+	
+
 	
 	public static int getLevel() throws IOException {
 		List<String> lines = Files.readAllLines(Paths.get("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt"), Charset.defaultCharset());
 		
 		level = Integer.parseInt(lines.get(0));
+		bonus = Integer.parseInt(lines.get(1));
 				
 		return level;
 	}

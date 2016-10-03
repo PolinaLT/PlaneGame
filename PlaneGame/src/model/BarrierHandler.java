@@ -20,31 +20,36 @@ public class BarrierHandler {
 	private List<Barrier> typeList = new ArrayList<>();
 	private int xPlane;
 	private int yPlane;
+	private int level;
+	private int xForBarrier;
+	private int yForBarrier;
+	private int length = 1000;
+	private static int bonusStatus = 0;
 	
-	public BarrierHandler() {
-		
+	public BarrierHandler(int level) {
+		this.level = level;
 	}
 
 	
 	public List<Barrier> createBonusList() {
-		for (numberOfBarriers = 0; numberOfBarriers < 10; numberOfBarriers++) {		
-			barrier = new BonusBarrier(6000);			
+		for (numberOfBarriers = 0; numberOfBarriers < 20; numberOfBarriers++) {		
+			barrier = new BonusBarrier(length);			
 			bonusBarrierList.add(barrier);
 		}			
 		return bonusBarrierList;		
 	}
 	
 	public List<Barrier> createPlaneList() {
-		for (numberOfBarriers = 0; numberOfBarriers < 10; numberOfBarriers++) {
-			barrier = new PlaneBarrier(6000);
+		for (numberOfBarriers = 0; numberOfBarriers < 5; numberOfBarriers++) {
+			barrier = new PlaneBarrier(length);
 			planeBarrierList.add(barrier);
 		}
 		return planeBarrierList;
 	}
 	
 	public List<Barrier> createLightningList() {
-		for (numberOfBarriers = 0; numberOfBarriers < 30; numberOfBarriers++) {
-			barrier = new LightningBarrier(6000);
+		for (numberOfBarriers = 0; numberOfBarriers < 5; numberOfBarriers++) {
+			barrier = new LightningBarrier(length);
 			lightningBarrierList.add(barrier);
 		}
 		return lightningBarrierList;
@@ -76,61 +81,52 @@ public class BarrierHandler {
 	public GameStatus checkStatus(int xPlane, int yPlane) {
 		this.xPlane = xPlane;
 		this.yPlane = yPlane;
-		//System.out.println(xPlane + " " + yPlane);
 		
-		barrierListStatus(bonusBarrierList);
+		bonusStatus();
 		barrierListStatus(lightningBarrierList);
 		barrierListStatus(planeBarrierList);
 		
 		if (winStatus < 0) {
 			gameStatus = GameStatus.WIN;
 		}
-		//System.out.println(gameStatus);
+		
 		return gameStatus;
 	}
 	
-	private void barrierListStatus(List<Barrier> barrierList) {
-		/*for (int i = 0; i < barrierList.size(); i++) {
-			barrier = barrierList.get(i);
-			int xForBarrier = barrier.getXLocation();
-			int yForBarrier = barrier.getYLocation();
-			
-			for (int a = xPlane; a < xPlane + 15; a++) {
-				for (int b = yPlane; b < yPlane + 15; b++) {
-					for (int c = xForBarrier; c < xForBarrier + 20; c++) {
-						for (int d = yForBarrier; d < yForBarrier + 20; d++) {
-							if (a == c & b == d) {
-								gameStatus = GameStatus.LOSS;
-								System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
-								System.out.println(a);
-								System.out.println(b);
-								System.out.println(c);
-								System.out.println(d);
-							}
-							
-							if (d < 0) {
-								winStatus --;
-							}
-							else {
-								winStatus ++;
-							}
-						}
-					}
-				}
-			}
-			
-			
-		}*/
-		
-		
-		for (int i = 0; i < barrierList.size(); i++) {
-			barrier = barrierList.get(i);
-			int xForBarrier = barrier.getXLocation();
-			int yForBarrier = barrier.getYLocation();
+	public static int bonusReport() {
+		return bonusStatus;
+	}
+	
+	private void bonusStatus() {
+		for (int i = 0; i < bonusBarrierList.size(); i++) {
+			barrier = bonusBarrierList.get(i);
+			xForBarrier = barrier.getXLocation();
+			yForBarrier = barrier.getYLocation();
 			
 			if((yForBarrier - yPlane > -20) & (yForBarrier - yPlane < 15) & 
 					(xForBarrier - xPlane > -15) & (xForBarrier - xPlane < 15)) {
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!");
+				bonusStatus ++;
+				System.out.println(bonusStatus);
+			}
+			
+			if (xForBarrier < 0) {
+				winStatus --;
+			}
+			else {
+				winStatus ++;
+			}			
+		}
+	}
+	
+	private void barrierListStatus(List<Barrier> barrierList) {
+		
+		for (int i = 0; i < barrierList.size(); i++) {
+			barrier = barrierList.get(i);
+			xForBarrier = barrier.getXLocation();
+			yForBarrier = barrier.getYLocation();
+			
+			if((yForBarrier - yPlane > -20) & (yForBarrier - yPlane < 15) & 
+					(xForBarrier - xPlane > -15) & (xForBarrier - xPlane < 15)) {
 				gameStatus = GameStatus.LOSS;
 			}
 			
@@ -141,38 +137,7 @@ public class BarrierHandler {
 				else {
 					winStatus ++;
 				}
-			}
-			
-		}
-		
-		
-		
-		/*for (int i = 0; i < barrierList.size(); i++) {
-			barrier = barrierList.get(i);
-			int xForBarrier = barrier.getXLocation();
-			
-			for (int yForPlane = yPlane; yForPlane < (yPlane + 49); yForPlane++) {
-				
-				for (int yForBarrier = barrier.getYLocation(); yForBarrier < (barrier.getYLocation() + 20); yForBarrier++) {
-					
-					if (xForBarrier == xPlane && yForBarrier == yForPlane) {
-						gameStatus = GameStatus.LOSS;
-						break;
-					}
-					
-					if (xForBarrier < 0) {
-						winStatus--;
-					}
-					else {
-						winStatus++;
-					}
-					
-				}
-				
-			}
-		
-		}*/		
+			}			
+		}			
 	}
-
-
 }

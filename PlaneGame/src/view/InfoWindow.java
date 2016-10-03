@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import controller.Controller;
 import model.GameStatus;
 
 public class InfoWindow {
@@ -15,12 +16,14 @@ public class InfoWindow {
 	private JPanel infoPanel = new JPanel();
 	private JLabel infoLabel;
 	
-	public InfoWindow(GameStatus gameStatus) throws IOException {
+	public InfoWindow(GameStatus gameStatus, int bonusStatus) throws IOException {
 		
 		switch (gameStatus) {
 		case WIN:
 			infoLabel = new JLabel("WINNER!");
-			LevelWindow.setLevel();
+			LevelWindow.setLevelBonus(bonusStatus);
+			//setBonus
+			System.out.println(bonusStatus);
 			break;
 		case LOSS:
 			infoLabel = new JLabel("LOSER!");

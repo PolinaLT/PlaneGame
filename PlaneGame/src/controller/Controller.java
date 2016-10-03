@@ -13,19 +13,27 @@ public class Controller {
 	private StartGamePanel gamePanel;
 	private GameStatus status = GameStatus.PLAY;
 	
+	
 	public Controller() {
 		
 	}
 	
 	public void startGame(JFrame gameFrame, int level) {
-		gamePanel = new StartGamePanel(level);
+		gamePanel = new StartGamePanel();
 		gameFrame.add(gamePanel);
-		gamePanel.drawCloud();
+		
+		gamePanel.drawCloud(level);
 	}
 	
 	public GameStatus report() {
 		 return gamePanel.report();
 	}
-
 	
+	public void nextLevel(int level) {
+		gamePanel.drawCloud(level);
+	}
+
+	public int bonusReport() {
+		return gamePanel.bonusReport();
+	}
 }
