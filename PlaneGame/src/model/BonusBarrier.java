@@ -19,7 +19,7 @@ public class BonusBarrier implements Barrier {
 	}
 
 	public void setXLocation() {
-		xLocation -= 4;
+		xLocation -= 7;
 	}
 
 	public int getXLocation() {

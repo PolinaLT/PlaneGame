@@ -20,7 +20,7 @@ public class LightningBarrier implements Barrier {
 	}
 	
 	public void setXLocation() {
-		xLocation -= 2;
+		xLocation -= 5;
 	}
 
 	public int getXLocation() {

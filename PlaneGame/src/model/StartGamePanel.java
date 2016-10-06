@@ -27,13 +27,13 @@ public class StartGamePanel extends JPanel {
 	private Image plane;
 	private Image barrierImage;
 	private GameStatus gameStatus = GameStatus.PLAY;
-	private Timer timer;
 	private int level;
 	private int speedUp = 0;
-	private BarrierHandler handler;
+	private ObjectHandler handler;
 	private List<Barrier> bonusList;
 	private List<Barrier> planeList;
 	private List<Barrier> lightningList;
+	private TimerHandler newTimer;
 	
 	
 	public StartGamePanel() {
@@ -45,7 +45,7 @@ public class StartGamePanel extends JPanel {
 	}
 	
 	public int bonusReport() {
-		return BarrierHandler.bonusReport();
+		return ObjectHandler.bonusReport();
 	}
 	
 	
@@ -77,53 +77,34 @@ public class StartGamePanel extends JPanel {
 		}
 	}
 	
-	public void drawCloud(int level) {
+	private void drawCloud() {
 		repaint();
-		this.level = level;
-		handler = new BarrierHandler(level);
+		
+		handler = new ObjectHandler(level);
 		gameStatus = GameStatus.PLAY;
 		
 		bonusList = handler.createBonusList();
 		planeList = handler.createPlaneList();
 		lightningList = handler.createLightningList();
-		startTimer();
-		timer.start();
-		if (gameStatus != GameStatus.PLAY) {
-			timer.stop();
-			System.out.println("111111111111111111111111111");
-		}
-		
 	}
 	
-	private void startTimer() {
-		timer = new Timer(1, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				start();
-				
-				if (gameStatus == GameStatus.PLAY) {
-					handler.changeLocation();
-					repaint();
-				}
-				else {
-					stopTimer(timer);
-					
-					return;
-				}
-				
-				drawPlane();
-				drawBarrier(bonusList);
-				drawBarrier(planeList);
-				drawBarrier(lightningList);
-				
-				gameStatus = handler.checkStatus(xPosition, yPosition);
-			}
-		});
+	
+	
+	public void startGame(int level) {
+		this.level = level;
+		drawCloud();
+		newTimer = new TimerHandler();
 	}
 	
-	private void stopTimer(Timer time) {
-		//System.out.println("22222222222222222222222");
-		time.stop();
+	public void nextGame(int level) {
+		this.level = level;
+		drawCloud();
+		newTimer.restart();
 	}
+	
+	
+	
+	
 	
 	private void drawPlane() {
 		start();
@@ -134,7 +115,44 @@ public class StartGamePanel extends JPanel {
 			repaint();
 	}
 	
-	
+	class TimerHandler {
+		private Timer timer;
+		
+		public TimerHandler() {
+			startTimer();
+			timer.start();
+		}		
+		
+		private void startTimer() {
+			timer = new Timer(1, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					start();
+					
+					if (gameStatus == GameStatus.PLAY) {
+						handler.changeLocation();
+						repaint();
+					}
+					else {
+						timer.stop();
+						//stopTimer(timer);
+						
+						return;
+					}
+					
+					drawPlane();
+					drawBarrier(bonusList);
+					drawBarrier(planeList);
+					drawBarrier(lightningList);
+					
+					gameStatus = handler.checkStatus(xPosition, yPosition);
+				}
+			});
+		}
+		
+		public void restart() {
+			timer.restart();
+		}
+	}
 	
 	class KeyHandler implements KeyListener {
 

@@ -19,7 +19,7 @@ public class PlaneBarrier implements Barrier {
 	}	
 	
 	public void setXLocation() {
-		xLocation -= 6;
+		xLocation -= 9;
 	}
 
 	public int getXLocation() {

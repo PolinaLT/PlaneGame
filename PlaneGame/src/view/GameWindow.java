@@ -10,11 +10,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.RepaintManager;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 import org.omg.PortableServer.ServantRetentionPolicyValue;
 
-import view.LevelWindow;
+import view.LevelInfo;
 import controller.Controller;
 import model.GameStatus;
 import model.StartGamePanel;
@@ -28,16 +29,16 @@ public class GameWindow extends JFrame {
 	private JPanel infoPanel = new JPanel();
 	private JFrame infoFrame = new JFrame("Info");
 	private JButton nextButton = new JButton("Играть дальше");
-	private CheckThread checkThread;
+	private TimerHandler newTimer;
+	private JLabel levelLabel = new JLabel();
 	
 	public GameWindow() throws IOException {
 		gameFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		gameFrame.setSize(1000, 700);
 		
-		controller.startGame(gameFrame, LevelWindow.getLevel());
+		controller.startGame(gameFrame, LevelInfo.getLevel());
 		
-		//checkThread.start();
-		checkThread = new CheckThread();
+		newTimer = new TimerHandler();
 		gameFrame.setVisible(true);
 	}
 	
@@ -48,38 +49,40 @@ public class GameWindow extends JFrame {
 
 	private void newGame() throws IOException {
 		gameStatus = GameStatus.PLAY;
-		controller.nextLevel(LevelWindow.getLevel());
-		CheckThread checkThread = new CheckThread();
+		controller.nextGame(LevelInfo.getLevel());
+		newTimer.restart();
 	}
 	
 	
-	
-	class CheckThread implements Runnable {
+	class TimerHandler {
+		private Timer timer;
 		
-		public CheckThread() {
-			Thread newThread = new Thread(this);
-			newThread.start();
+		public TimerHandler() {
+			timer();
+			timer.start();
 		}
 		
-		public void run() {
-			while (gameStatus == GameStatus.PLAY) {
-				try {
-					Thread.sleep(1);
-					System.out.println("0000000000000000");
+		private void timer() {
+			timer = new Timer(1, new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
 					gameStatus = controller.report();
 					bonusStatus = controller.bonusReport();
 					if (gameStatus != GameStatus.PLAY) {
 						try {
 							Info info = new Info();
-							
-						} catch (IOException e) {
-							e.printStackTrace();
+							timer.stop();
+							return;
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
 				}
-			}
+			});
+		}
+		
+		public void restart() {
+			timer.restart();
 		}
 	}
 	
@@ -87,17 +90,20 @@ public class GameWindow extends JFrame {
 		public Info() throws IOException {
 			switch (gameStatus) {
 			case WIN:
-				infoLabel = new JLabel("WINNER!");
-				LevelWindow.setLevelBonus(bonusStatus);
+				infoLabel = new JLabel("Победа!");
+				levelLabel = new JLabel("Цель:" + Integer.toString(bonusStatus) + "/" + Integer.toString(LevelInfo.getLevel()));
+				LevelInfo.setLevelBonus(bonusStatus);
 				//setBonus
 				System.out.println(bonusStatus);
 				break;
 			case LOSS:
 				infoLabel = new JLabel("LOSER!");
+				levelLabel = new JLabel(" ");
 				break;
 			default:
 				break;
 			}
+			
 			
 			infoFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			infoFrame.setSize(300, 100);
@@ -107,6 +113,9 @@ public class GameWindow extends JFrame {
 			
 			infoFrame.add(infoPanel);
 			infoPanel.add(infoLabel, BorderLayout.NORTH);
+			infoPanel.add(levelLabel);
+			
+			
 			infoPanel.add(nextButton, BorderLayout.SOUTH);
 			
 			nextButton.addActionListener(new ActionListener() {

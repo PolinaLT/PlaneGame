@@ -8,11 +8,12 @@ import java.util.Random;
 import javax.xml.xpath.XPath;
 
 
-public class BarrierHandler {
+public class ObjectHandler {
 	private List<Barrier> planeBarrierList = new ArrayList<>();
 	private List<Barrier> bonusBarrierList = new ArrayList<>();
 	private List<Barrier> lightningBarrierList = new ArrayList<>();
 	private List<Barrier> workList = new ArrayList<>();
+	private List<Whizbang> whizbangs = new ArrayList<>();
 	private int numberOfBarriers;
 	private Barrier barrier;
 	private GameStatus gameStatus = GameStatus.PLAY;
@@ -23,16 +24,20 @@ public class BarrierHandler {
 	private int level;
 	private int xForBarrier;
 	private int yForBarrier;
-	private int length = 1000;
+	private int length;
+	private final int startLength = 1000;
+	private final int changeLength = 500;
 	private static int bonusStatus = 0;
+	private final int startBonus = 3;
+	private final int startBarrier = 7;
 	
-	public BarrierHandler(int level) {
+	public ObjectHandler(int level) {
 		this.level = level;
+		length = startLength + changeLength * (level - 1);
 	}
-
 	
 	public List<Barrier> createBonusList() {
-		for (numberOfBarriers = 0; numberOfBarriers < 20; numberOfBarriers++) {		
+		for (numberOfBarriers = 0; numberOfBarriers < startBonus * level * 2; numberOfBarriers++) {		
 			barrier = new BonusBarrier(length);			
 			bonusBarrierList.add(barrier);
 		}			
@@ -40,7 +45,7 @@ public class BarrierHandler {
 	}
 	
 	public List<Barrier> createPlaneList() {
-		for (numberOfBarriers = 0; numberOfBarriers < 5; numberOfBarriers++) {
+		for (numberOfBarriers = 0; numberOfBarriers < startBarrier * level; numberOfBarriers++) {
 			barrier = new PlaneBarrier(length);
 			planeBarrierList.add(barrier);
 		}
@@ -48,7 +53,7 @@ public class BarrierHandler {
 	}
 	
 	public List<Barrier> createLightningList() {
-		for (numberOfBarriers = 0; numberOfBarriers < 5; numberOfBarriers++) {
+		for (numberOfBarriers = 0; numberOfBarriers < startBarrier * level; numberOfBarriers++) {
 			barrier = new LightningBarrier(length);
 			lightningBarrierList.add(barrier);
 		}
@@ -78,6 +83,18 @@ public class BarrierHandler {
 		workList.clear();
 	}
 
+	public void addWhizbang(Whizbang whizbang) {
+		whizbangs.add(whizbang);
+	}
+	
+	public List<Whizbang> getWhizbangList() {
+		return whizbangs;
+	}
+	
+	/////////////////////////
+	// Сравнение для выстрелов
+	///////////////////////////
+	
 	public GameStatus checkStatus(int xPlane, int yPlane) {
 		this.xPlane = xPlane;
 		this.yPlane = yPlane;
@@ -104,7 +121,7 @@ public class BarrierHandler {
 			yForBarrier = barrier.getYLocation();
 			
 			if((yForBarrier - yPlane > -20) & (yForBarrier - yPlane < 15) & 
-					(xForBarrier - xPlane > -15) & (xForBarrier - xPlane < 15)) {
+					(xForBarrier - xPlane == -19)) {
 				bonusStatus ++;
 				System.out.println(bonusStatus);
 			}

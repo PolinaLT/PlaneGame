@@ -11,8 +11,6 @@ import model.StartGamePanel;
 
 public class Controller {
 	private StartGamePanel gamePanel;
-	private GameStatus status = GameStatus.PLAY;
-	
 	
 	public Controller() {
 		
@@ -22,15 +20,15 @@ public class Controller {
 		gamePanel = new StartGamePanel();
 		gameFrame.add(gamePanel);
 		
-		gamePanel.drawCloud(level);
+		gamePanel.startGame(level);
 	}
 	
 	public GameStatus report() {
 		 return gamePanel.report();
 	}
 	
-	public void nextLevel(int level) {
-		gamePanel.drawCloud(level);
+	public void nextGame(int level) {
+		gamePanel.nextGame(level);
 	}
 
 	public int bonusReport() {
