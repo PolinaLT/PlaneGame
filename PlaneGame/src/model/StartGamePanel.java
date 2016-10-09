@@ -29,7 +29,7 @@ public class StartGamePanel extends JPanel {
 	private GameStatus gameStatus = GameStatus.PLAY;
 	private int level;
 	private int speedUp = 0;
-	private ObjectHandler handler;
+	private GameObjectHandler handler;
 	private List<Barrier> bonusList;
 	private List<Barrier> planeList;
 	private List<Barrier> lightningList;
@@ -45,7 +45,7 @@ public class StartGamePanel extends JPanel {
 	}
 	
 	public int bonusReport() {
-		return ObjectHandler.bonusReport();
+		return GameObjectHandler.bonusReport();
 	}
 	
 	
@@ -80,7 +80,7 @@ public class StartGamePanel extends JPanel {
 	private void drawCloud() {
 		repaint();
 		
-		handler = new ObjectHandler(level);
+		handler = new GameObjectHandler(level);
 		gameStatus = GameStatus.PLAY;
 		
 		bonusList = handler.createBonusList();

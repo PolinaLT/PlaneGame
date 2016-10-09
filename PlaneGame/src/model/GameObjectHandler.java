@@ -8,12 +8,12 @@ import java.util.Random;
 import javax.xml.xpath.XPath;
 
 
-public class ObjectHandler {
+public class GameObjectHandler {
 	private List<Barrier> planeBarrierList = new ArrayList<>();
 	private List<Barrier> bonusBarrierList = new ArrayList<>();
 	private List<Barrier> lightningBarrierList = new ArrayList<>();
 	private List<Barrier> workList = new ArrayList<>();
-	private List<Whizbang> whizbangs = new ArrayList<>();
+	private List<Whizbang> whizbangList = new ArrayList<>();
 	private int numberOfBarriers;
 	private Barrier barrier;
 	private GameStatus gameStatus = GameStatus.PLAY;
@@ -31,7 +31,7 @@ public class ObjectHandler {
 	private final int startBonus = 3;
 	private final int startBarrier = 7;
 	
-	public ObjectHandler(int level) {
+	public GameObjectHandler(int level) {
 		this.level = level;
 		length = startLength + changeLength * (level - 1);
 	}
@@ -84,11 +84,11 @@ public class ObjectHandler {
 	}
 
 	public void addWhizbang(Whizbang whizbang) {
-		whizbangs.add(whizbang);
+		whizbangList.add(whizbang);
 	}
 	
 	public List<Whizbang> getWhizbangList() {
-		return whizbangs;
+		return whizbangList;
 	}
 	
 	/////////////////////////
