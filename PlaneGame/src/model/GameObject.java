@@ -5,15 +5,17 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 
 
-public interface Barrier {
+public interface GameObject {
 		
 	void setXLocation();
+	
+	void setYLocation(VerticalRelocation relocation);
 	
 	int getXLocation();
 		
 	int getYLocation();
 	
-	Color getColor();
-	
+	void setNullPosition();
+		
 	ImageIcon getIcon();
 }

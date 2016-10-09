@@ -21,19 +21,18 @@ import javax.swing.Timer;
 
 public class StartGamePanel extends JPanel {
 	private BufferedImage image;
-	private int xPosition = 500;
-	private int yPosition = 300;
-	private ImageIcon planeIcon = new ImageIcon("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/plane3.png");
-	private Image plane;
+	private Plane plane = new Plane();
+	private Image planeImage;
 	private Image barrierImage;
 	private GameStatus gameStatus = GameStatus.PLAY;
 	private int level;
 	private int speedUp = 0;
 	private GameObjectHandler handler;
-	private List<Barrier> bonusList;
-	private List<Barrier> planeList;
-	private List<Barrier> lightningList;
+	private List<GameObject> bonusList;
+	private List<GameObject> stoneList;
+	private List<GameObject> lightningList;
 	private TimerHandler newTimer;
+	private List<GameObject> whizbangList;
 	
 	
 	public StartGamePanel() {
@@ -67,13 +66,21 @@ public class StartGamePanel extends JPanel {
         g2.drawImage(this.image, 0, 0, null);
     }
 	
-	private void drawBarrier(List<Barrier> barrierList) {
+	private void drawBarrier(List<GameObject> barrierList) {
 		Graphics2D g = (Graphics2D) image.getGraphics();
 		for (int i = 0; i < barrierList.size(); i++) {
-			Barrier barrier = barrierList.get(i);
+			GameObject barrier = barrierList.get(i);
 			barrierImage = barrier.getIcon().getImage();
 			g.drawImage(barrierImage, barrier.getXLocation() - speedUp, barrier.getYLocation(), null);
 			speedUp = 0;
+		}
+	}
+	
+	private void drawWhizbang() {
+		Graphics2D g = (Graphics2D) image.getGraphics();
+		whizbangList = handler.getWhizbangList();
+		for (int i = 0; i < whizbangList.size(); i++) {
+			g.drawRect(whizbangList.get(i).getXLocation(), whizbangList.get(i).getYLocation(), 5, 5);
 		}
 	}
 	
@@ -84,12 +91,10 @@ public class StartGamePanel extends JPanel {
 		gameStatus = GameStatus.PLAY;
 		
 		bonusList = handler.createBonusList();
-		planeList = handler.createPlaneList();
+		stoneList = handler.createStoneList();
 		lightningList = handler.createLightningList();
 	}
-	
-	
-	
+
 	public void startGame(int level) {
 		this.level = level;
 		drawCloud();
@@ -102,16 +107,12 @@ public class StartGamePanel extends JPanel {
 		newTimer.restart();
 	}
 	
-	
-	
-	
-	
 	private void drawPlane() {
 		start();
 		Graphics2D g = (Graphics2D) image.getGraphics();
 		g.setColor(Color.YELLOW);
-			plane = planeIcon.getImage();
-			g.drawImage(plane, xPosition, yPosition, null);
+			planeImage = plane.getIcon().getImage();
+			g.drawImage(planeImage, plane.getXLocation(), plane.getYLocation(), null);
 			repaint();
 	}
 	
@@ -134,17 +135,16 @@ public class StartGamePanel extends JPanel {
 					}
 					else {
 						timer.stop();
-						//stopTimer(timer);
-						
 						return;
 					}
 					
 					drawPlane();
 					drawBarrier(bonusList);
-					drawBarrier(planeList);
+					drawBarrier(stoneList);
 					drawBarrier(lightningList);
+					drawWhizbang();
 					
-					gameStatus = handler.checkStatus(xPosition, yPosition);
+					gameStatus = handler.checkStatus(plane.getXLocation(), plane.getYLocation());
 				}
 			});
 		}
@@ -164,13 +164,13 @@ public class StartGamePanel extends JPanel {
 			int keyCode = e.getKeyCode();
 			switch (keyCode) {
 			case KeyEvent.VK_UP:
-				yPosition -= 20;	
+				plane.setYLocation(VerticalRelocation.UP);
 				break;
 			case KeyEvent.VK_DOWN:
-				yPosition += 20;
+				plane.setYLocation(VerticalRelocation.DOWN);
 				break;
 			case KeyEvent.VK_RIGHT:
-				//speedUp = 20;
+				handler.addWhizbang(new Whizbang(plane.getXLocation(), plane.getYLocation()));
 				break;
 			default:
 				break;
@@ -178,7 +178,6 @@ public class StartGamePanel extends JPanel {
 			
 		}
 
-		@Override
 		public void keyReleased(KeyEvent e) {
 			
 		}
