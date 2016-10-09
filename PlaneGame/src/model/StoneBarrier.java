@@ -33,7 +33,7 @@ public class StoneBarrier implements GameObject {
 	}
 
 	public void setYLocation(VerticalRelocation relocation) {
-		
+	
 	}
 
 	public void setNullPosition() {

@@ -11,25 +11,26 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import controller.Controller;
+
 public class MainWindow extends JPanel {
 	private JFrame mainFrame = new JFrame("Plane");
 	private JPanel mainPanel = new JPanel();
 	private JPanel menuPanel = new JPanel();
 	private JLabel levelLabel;
 	private JLabel bonusLabel;
+	private Controller controller = new Controller();
 	
 	public MainWindow() throws IOException {
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		mainFrame.setSize(500, 200);
-		mainFrame.setLocation(150, 0);
+		mainFrame.setSize(500, 100);
+		mainFrame.setLocationRelativeTo(null);
 		
-		levelLabel = new JLabel("Уровень: " + Integer.toString(LevelInfo.getLevel()));
-		bonusLabel = new JLabel("Цель уровня: " + Integer.toString(LevelInfo.getLevel()));
+		levelLabel = new JLabel("Уровень: " + Integer.toString(controller.getLevel()));
+		bonusLabel = new JLabel("Цель уровня: " + Integer.toString(controller.getLevel()));
 		
 		mainFrame.add(mainPanel);
 		mainPanel.add(menu());
-//		mainPanel.add(levelLabel);
-//		mainPanel.add(bonusLabel);
 		
 		
 		mainFrame.setVisible(true);
@@ -48,12 +49,9 @@ public class MainWindow extends JPanel {
 		
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
+				
 					GameWindow gameWindow = new GameWindow();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				
 				
 			}
 		});
@@ -71,18 +69,7 @@ public class MainWindow extends JPanel {
 		
 		restart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					LevelInfo.restartGame();
-//					try {
-//						panelRepaint();
-//					} catch (IOException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+					controller.restartHistory();
 			}
 		});
 		
@@ -92,8 +79,8 @@ public class MainWindow extends JPanel {
 	private void panelRepaint() throws IOException {
 		mainPanel.remove(levelLabel);
 		mainPanel.remove(bonusLabel);
-		levelLabel = new JLabel("Уровень: " + Integer.toString(LevelInfo.getLevel()));
-		bonusLabel = new JLabel("Цель уровня: " + Integer.toString(LevelInfo.getLevel()));
+		levelLabel = new JLabel("Уровень: " + Integer.toString(controller.getLevel()));
+		bonusLabel = new JLabel("Цель уровня: " + Integer.toString(controller.getLevel()));
 		mainPanel.add(levelLabel);
 		mainPanel.add(bonusLabel);
 		repaint();

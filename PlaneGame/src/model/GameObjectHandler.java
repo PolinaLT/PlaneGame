@@ -1,5 +1,6 @@
 package model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,7 @@ public class GameObjectHandler {
 	private List<GameObject> typeList = new ArrayList<>();
 	private int xPlane;
 	private int yPlane;
+	private Level levelInfo;
 	private int level;
 	private int xForBarrier;
 	private int yForBarrier;
@@ -30,9 +32,11 @@ public class GameObjectHandler {
 	private static int bonusStatus = 0;
 	private final int startBonus = 3;
 	private final int startBarrier = 7;
+	private int removeStone = 0;
 	
-	public GameObjectHandler(int level) {
-		this.level = level;
+	public GameObjectHandler() {
+		levelInfo = new Level();
+		level = levelInfo.getLevel();
 		length = startLength + changeLength * (level - 1);
 	}
 	
@@ -98,6 +102,7 @@ public class GameObjectHandler {
 		for (numberOfBarriers = 0; numberOfBarriers < barrierList.size(); numberOfBarriers++) {
 			barrier = barrierList.get(numberOfBarriers);
 			barrier.setXLocation();
+			barrier.setYLocation(VerticalRelocation.DOWN);
 			workList.add(barrier);
 		}
 		typeList.clear();
@@ -124,12 +129,13 @@ public class GameObjectHandler {
 		
 		if (bonusBarrierList.isEmpty() & stoneBarrierList.isEmpty() & lightningBarrierList.isEmpty()) {
 			gameStatus = GameStatus.WIN;
+			levelInfo.setLevelBonus(bonusStatus);
 		}
 		
 		return gameStatus;
 	}
 	
-	public static int bonusReport() {
+	public int bonusReport() {
 		return bonusStatus;
 	}
 	
@@ -148,21 +154,38 @@ public class GameObjectHandler {
 		}
 	}
 	
+	private void checkWhizbang() {
+		Iterator<GameObject> iterator = whizbangList.iterator();
+		
+		while (iterator.hasNext()) {
+			if (iterator.next().getXLocation() >= 1000) {
+				iterator.remove();
+			}
+		}
+	}
+	
 	private void whizbangStatus() {
 		if (!whizbangList.isEmpty()) {
+			checkWhizbang();
 			for (int i = 0; i < whizbangList.size(); i++) {
 				whizbang = whizbangList.get(i);
 				for (int j = 0; j < stoneBarrierList.size(); j++) {
 					barrier = stoneBarrierList.get(j);
-					if ((barrier.getXLocation() == whizbang.getXLocation()) & 
-							(barrier.getYLocation() - whizbang.getYLocation() > -1) &
-							(barrier.getYLocation() - whizbang.getYLocation() < 21)) {
+					if ((barrier.getXLocation() - whizbang.getXLocation() > -5) & 
+							(barrier.getXLocation() - whizbang.getXLocation() < 5) &
+							(barrier.getYLocation() - whizbang.getYLocation() > -20) &
+							(barrier.getYLocation() - whizbang.getYLocation() < 20)) {
 						barrier.setNullPosition();
 						whizbang.setNullPosition();
+						removeStone ++;
 					}
 				}	
 			}
 		}
+	}
+	
+	public int removeStoneStatus() {
+		return removeStone;
 	}
 	
 	private void barrierListStatus(List<GameObject> barrierList) {

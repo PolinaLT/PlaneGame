@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.lang.management.PlatformLoggingMXBean;
 import java.util.List;
 import java.util.TimerTask;
@@ -25,28 +26,38 @@ public class StartGamePanel extends JPanel {
 	private Image planeImage;
 	private Image barrierImage;
 	private GameStatus gameStatus = GameStatus.PLAY;
-	private int level;
 	private int speedUp = 0;
+	private Level level = new Level();
 	private GameObjectHandler handler;
 	private List<GameObject> bonusList;
 	private List<GameObject> stoneList;
 	private List<GameObject> lightningList;
 	private TimerHandler newTimer;
 	private List<GameObject> whizbangList;
+	private String information;
 	
 	
 	public StartGamePanel() {
-		
 		image = new BufferedImage(1000, 700, BufferedImage.TYPE_4BYTE_ABGR);
 		KeyHandler listener = new KeyHandler();
 		addKeyListener(listener);
 		setFocusable(true);		
 	}
 	
-	public int bonusReport() {
-		return GameObjectHandler.bonusReport();
+	private void information() {
+		Graphics g = image.getGraphics();
+		g.setColor(Color.WHITE);
+		information = "Цель: " + handler.bonusReport() + "/" + level.getLevel() + " Уничтожено объектов: " + handler.removeStoneStatus();
+		g.drawString(information, 0, 650);
 	}
 	
+	public int bonusReport() {
+		return handler.bonusReport();
+	}
+	
+	public void stopGame() {
+		newTimer.stop();
+	}
 	
 	public GameStatus report() {
 		
@@ -87,7 +98,7 @@ public class StartGamePanel extends JPanel {
 	private void drawCloud() {
 		repaint();
 		
-		handler = new GameObjectHandler(level);
+		handler = new GameObjectHandler();
 		gameStatus = GameStatus.PLAY;
 		
 		bonusList = handler.createBonusList();
@@ -95,14 +106,14 @@ public class StartGamePanel extends JPanel {
 		lightningList = handler.createLightningList();
 	}
 
-	public void startGame(int level) {
-		this.level = level;
+	public void startGame() {
+		handler = new GameObjectHandler();
 		drawCloud();
 		newTimer = new TimerHandler();
 	}
 	
-	public void nextGame(int level) {
-		this.level = level;
+	public void nextGame() {
+		handler = new GameObjectHandler();
 		drawCloud();
 		newTimer.restart();
 	}
@@ -143,6 +154,7 @@ public class StartGamePanel extends JPanel {
 					drawBarrier(stoneList);
 					drawBarrier(lightningList);
 					drawWhizbang();
+					information();
 					
 					gameStatus = handler.checkStatus(plane.getXLocation(), plane.getYLocation());
 				}
@@ -151,6 +163,10 @@ public class StartGamePanel extends JPanel {
 		
 		public void restart() {
 			timer.restart();
+		}
+		
+		public void stop() {
+			timer.stop();
 		}
 	}
 	

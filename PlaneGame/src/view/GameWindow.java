@@ -3,6 +3,8 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -15,7 +17,6 @@ import javax.swing.WindowConstants;
 
 import org.omg.PortableServer.ServantRetentionPolicyValue;
 
-import view.LevelInfo;
 import controller.Controller;
 import model.GameStatus;
 import model.StartGamePanel;
@@ -31,14 +32,40 @@ public class GameWindow extends JFrame {
 	private JButton nextButton = new JButton("Играть дальше");
 	private TimerHandler newTimer;
 	private JLabel levelLabel = new JLabel();
+	private JButton close = new JButton("Меню");
 	
-	public GameWindow() throws IOException {
+	public GameWindow() {
 		gameFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		gameFrame.setSize(1000, 700);
-		
-		controller.startGame(gameFrame, LevelInfo.getLevel());
+		gameFrame.setLocationRelativeTo(null);
+		controller.startGame(gameFrame);
 		
 		newTimer = new TimerHandler();
+		
+		gameFrame.addWindowListener(new WindowListener() {
+			public void windowOpened(WindowEvent e) {
+			}
+			
+			public void windowIconified(WindowEvent e) {
+			}
+			
+			public void windowDeiconified(WindowEvent e) {
+			}
+			
+			public void windowDeactivated(WindowEvent e) {				
+			}
+			
+			public void windowClosing(WindowEvent e) {
+			}
+			
+			public void windowClosed(WindowEvent e) {
+				controller.stopGame();
+			}
+			
+			public void windowActivated(WindowEvent e) {
+			}
+		});
+		
 		gameFrame.setVisible(true);
 	}
 	
@@ -47,9 +74,9 @@ public class GameWindow extends JFrame {
 	}
 
 
-	private void newGame() throws IOException {
+	private void newGame() {
 		gameStatus = GameStatus.PLAY;
-		controller.nextGame(LevelInfo.getLevel());
+		controller.nextGame();
 		newTimer.restart();
 	}
 	
@@ -91,9 +118,7 @@ public class GameWindow extends JFrame {
 			switch (gameStatus) {
 			case WIN:
 				infoLabel = new JLabel("Победа!");
-				levelLabel = new JLabel("Цель:" + Integer.toString(bonusStatus) + "/" + Integer.toString(LevelInfo.getLevel()));
-				LevelInfo.setLevelBonus(bonusStatus);
-				//setBonus
+				levelLabel = new JLabel("Цель:" + Integer.toString(bonusStatus) + "/" + Integer.toString(controller.getLevel()));
 				System.out.println(bonusStatus);
 				break;
 			case LOSS:
@@ -106,7 +131,8 @@ public class GameWindow extends JFrame {
 			
 			
 			infoFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			infoFrame.setSize(300, 100);
+			infoFrame.setSize(400, 100);
+			infoFrame.setLocationRelativeTo(null);
 			
 			infoPanel.removeAll();
 			infoPanel.repaint();
@@ -117,16 +143,19 @@ public class GameWindow extends JFrame {
 			
 			
 			infoPanel.add(nextButton, BorderLayout.SOUTH);
+			infoPanel.add(close, BorderLayout.SOUTH);
 			
 			nextButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
 						newGame();
 						infoFrame.setVisible(false);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				}
+			});
+			
+			close.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					infoFrame.setVisible(false);
+					gameFrame.setVisible(false);
 				}
 			});
 			
