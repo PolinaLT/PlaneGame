@@ -19,10 +19,6 @@ public class Whizbang implements GameObject {
 		xPosition += 5;
 	}
 
-	public void setYLocation(VerticalRelocation relocation) {
-		
-	}
-
 	public int getXLocation() {
 		return xPosition;
 	}

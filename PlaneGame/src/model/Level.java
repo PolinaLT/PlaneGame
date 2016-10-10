@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 public class Level {
 	private int level;
 	private List<String> lines;
+	private PrintWriter out;
 	
 	public Level() {		
 		getLevel();
@@ -22,11 +23,9 @@ public class Level {
 		try {
 			lines = Files.readAllLines(Paths.get("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt"), Charset.defaultCharset());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		PrintWriter out;
 		try {
 			out = new PrintWriter("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt");
 			for (int i = 0; i < lines.size(); i++) {
@@ -44,7 +43,6 @@ public class Level {
 	        out.println(text);
 	        out.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}
@@ -53,7 +51,6 @@ public class Level {
 		try {
 			lines = Files.readAllLines(Paths.get("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt"), Charset.defaultCharset());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		lines.remove(lines.size() - 1);
@@ -73,7 +70,6 @@ public class Level {
 		try {
 			lines = Files.readAllLines(Paths.get("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt"), Charset.defaultCharset());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -81,14 +77,12 @@ public class Level {
 	}
 	
 	public void restartGame() {
-		PrintWriter out;
 		try {
 			out = new PrintWriter("C:/Users/sila-1/git/PlaneGame/PlaneGame/resources/level.txt");
 			String text = "1";
 			out.println(text);
 			out.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

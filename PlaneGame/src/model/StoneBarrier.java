@@ -32,10 +32,6 @@ public class StoneBarrier implements GameObject {
 		return planeIcon;
 	}
 
-	public void setYLocation(VerticalRelocation relocation) {
-	
-	}
-
 	public void setNullPosition() {
 		xLocation = 0;
 	}

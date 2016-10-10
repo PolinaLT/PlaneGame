@@ -32,13 +32,8 @@ public class BonusBarrier implements GameObject {
 		return bonusIcon;
 	}
 
-	public void setYLocation(VerticalRelocation relocation) {
-		
-	}
-
 	public void setNullPosition() {
-	
-	}
-	
+		xLocation = 0;
+	}	
 	
 }

@@ -22,7 +22,7 @@ import model.GameStatus;
 import model.StartGamePanel;
 
 public class GameWindow extends JFrame {
-	private static JFrame gameFrame = new JFrame("Let's play!");
+	private JFrame gameFrame = new JFrame("Let's play!");
 	private Controller controller = new Controller();
 	private GameStatus gameStatus = GameStatus.PLAY;
 	private int bonusStatus;
@@ -33,6 +33,7 @@ public class GameWindow extends JFrame {
 	private TimerHandler newTimer;
 	private JLabel levelLabel = new JLabel();
 	private JButton close = new JButton("Меню");
+	private Info info;
 	
 	public GameWindow() {
 		gameFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -69,11 +70,6 @@ public class GameWindow extends JFrame {
 		gameFrame.setVisible(true);
 	}
 	
-	public static JFrame getFrame() {
-		return gameFrame;
-	}
-
-
 	private void newGame() {
 		gameStatus = GameStatus.PLAY;
 		controller.nextGame();
@@ -96,11 +92,10 @@ public class GameWindow extends JFrame {
 					bonusStatus = controller.bonusReport();
 					if (gameStatus != GameStatus.PLAY) {
 						try {
-							Info info = new Info();
+							info = new Info();
 							timer.stop();
 							return;
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 					}

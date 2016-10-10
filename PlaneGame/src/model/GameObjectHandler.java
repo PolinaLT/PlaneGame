@@ -16,6 +16,7 @@ public class GameObjectHandler {
 	private List<GameObject> workList = new ArrayList<>();
 	private List<GameObject> whizbangList = new ArrayList<>();
 	private int numberOfBarriers;
+	private int numberOfWhizbangs;
 	private GameObject barrier;
 	private GameObject whizbang;
 	private GameStatus gameStatus = GameStatus.PLAY;
@@ -29,7 +30,7 @@ public class GameObjectHandler {
 	private int length;
 	private final int startLength = 1000;
 	private final int changeLength = 500;
-	private static int bonusStatus = 0;
+	private int bonusStatus = 0;
 	private final int startBonus = 3;
 	private final int startBarrier = 7;
 	private int removeStone = 0;
@@ -70,6 +71,7 @@ public class GameObjectHandler {
 		checkList(bonusBarrierList);
 		checkList(lightningBarrierList);
 		checkList(stoneBarrierList);
+		checkList(whizbangList);
 		
 		changeList(bonusBarrierList);
 		bonusBarrierList.clear();
@@ -102,7 +104,6 @@ public class GameObjectHandler {
 		for (numberOfBarriers = 0; numberOfBarriers < barrierList.size(); numberOfBarriers++) {
 			barrier = barrierList.get(numberOfBarriers);
 			barrier.setXLocation();
-			barrier.setYLocation(VerticalRelocation.DOWN);
 			workList.add(barrier);
 		}
 		typeList.clear();
@@ -123,7 +124,6 @@ public class GameObjectHandler {
 		this.yPlane = yPlane;
 		
 		bonusStatus();
-		//whizbangStatus();
 		barrierListStatus(lightningBarrierList);
 		barrierListStatus(stoneBarrierList);
 		
@@ -140,15 +140,15 @@ public class GameObjectHandler {
 	}
 	
 	private void bonusStatus() {
-		for (int i = 0; i < bonusBarrierList.size(); i++) {
-			barrier = bonusBarrierList.get(i);
+		for (numberOfBarriers = 0; numberOfBarriers < bonusBarrierList.size(); numberOfBarriers++) {
+			barrier = bonusBarrierList.get(numberOfBarriers);
 			xForBarrier = barrier.getXLocation();
 			yForBarrier = barrier.getYLocation();
 			
 			if((yForBarrier - yPlane > -20) & (yForBarrier - yPlane < 15) & 
-					(xForBarrier - xPlane == -19)) {
+					(xForBarrier - xPlane > -15) & (xForBarrier - xPlane < 15)) {
+				barrier.setNullPosition();
 				bonusStatus ++;
-				System.out.println(bonusStatus);
 			}
 					
 		}
@@ -167,10 +167,10 @@ public class GameObjectHandler {
 	private void whizbangStatus() {
 		if (!whizbangList.isEmpty()) {
 			checkWhizbang();
-			for (int i = 0; i < whizbangList.size(); i++) {
-				whizbang = whizbangList.get(i);
-				for (int j = 0; j < stoneBarrierList.size(); j++) {
-					barrier = stoneBarrierList.get(j);
+			for (numberOfWhizbangs = 0; numberOfWhizbangs < whizbangList.size(); numberOfWhizbangs++) {
+				whizbang = whizbangList.get(numberOfWhizbangs);
+				for (numberOfBarriers = 0; numberOfBarriers < stoneBarrierList.size(); numberOfBarriers++) {
+					barrier = stoneBarrierList.get(numberOfBarriers);
 					if ((barrier.getXLocation() - whizbang.getXLocation() > -5) & 
 							(barrier.getXLocation() - whizbang.getXLocation() < 5) &
 							(barrier.getYLocation() - whizbang.getYLocation() > -20) &
@@ -190,8 +190,8 @@ public class GameObjectHandler {
 	
 	private void barrierListStatus(List<GameObject> barrierList) {
 		
-		for (int i = 0; i < barrierList.size(); i++) {
-			barrier = barrierList.get(i);
+		for (numberOfBarriers = 0; numberOfBarriers < barrierList.size(); numberOfBarriers++) {
+			barrier = barrierList.get(numberOfBarriers);
 			xForBarrier = barrier.getXLocation();
 			yForBarrier = barrier.getYLocation();
 			

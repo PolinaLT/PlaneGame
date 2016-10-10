@@ -33,10 +33,6 @@ public class LightningBarrier implements GameObject {
 		return lightningIcon;
 	}
 
-	public void setYLocation(VerticalRelocation relocation) {
-		
-	}
-
 	public void setNullPosition() {
 		
 	}

@@ -17,17 +17,14 @@ public class MainWindow extends JPanel {
 	private JFrame mainFrame = new JFrame("Plane");
 	private JPanel mainPanel = new JPanel();
 	private JPanel menuPanel = new JPanel();
-	private JLabel levelLabel;
-	private JLabel bonusLabel;
 	private Controller controller = new Controller();
+	private GameWindow gameWindow;
+	private LevelReportWindow window;
 	
-	public MainWindow() throws IOException {
+	public MainWindow() {
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setSize(500, 100);
 		mainFrame.setLocationRelativeTo(null);
-		
-		levelLabel = new JLabel("Уровень: " + Integer.toString(controller.getLevel()));
-		bonusLabel = new JLabel("Цель уровня: " + Integer.toString(controller.getLevel()));
 		
 		mainFrame.add(mainPanel);
 		mainPanel.add(menu());
@@ -49,19 +46,15 @@ public class MainWindow extends JPanel {
 		
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-					GameWindow gameWindow = new GameWindow();
-				
-				
+				gameWindow = new GameWindow();	
 			}
 		});
 		
 		results.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					LevelReportWindow window = new LevelReportWindow();
+					window = new LevelReportWindow();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -75,17 +68,6 @@ public class MainWindow extends JPanel {
 		
 		return menuPanel;
 	}
-	
-	private void panelRepaint() throws IOException {
-		mainPanel.remove(levelLabel);
-		mainPanel.remove(bonusLabel);
-		levelLabel = new JLabel("Уровень: " + Integer.toString(controller.getLevel()));
-		bonusLabel = new JLabel("Цель уровня: " + Integer.toString(controller.getLevel()));
-		mainPanel.add(levelLabel);
-		mainPanel.add(bonusLabel);
-		repaint();
-	}
-
 
 	public static void main(String[] args) throws IOException {
 		MainWindow mainWindow = new MainWindow();

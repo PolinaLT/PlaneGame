@@ -34,18 +34,22 @@ public class StartGamePanel extends JPanel {
 	private List<GameObject> lightningList;
 	private TimerHandler newTimer;
 	private List<GameObject> whizbangList;
+	private int numberOfObjects;
 	private String information;
+	private Graphics g;
+	private Graphics2D g2;
+	private KeyHandler listener;
 	
 	
 	public StartGamePanel() {
 		image = new BufferedImage(1000, 700, BufferedImage.TYPE_4BYTE_ABGR);
-		KeyHandler listener = new KeyHandler();
+		listener = new KeyHandler();
 		addKeyListener(listener);
 		setFocusable(true);		
 	}
 	
 	private void information() {
-		Graphics g = image.getGraphics();
+		g = image.getGraphics();
 		g.setColor(Color.WHITE);
 		information = "Цель: " + handler.bonusReport() + "/" + level.getLevel() + " Уничтожено объектов: " + handler.removeStoneStatus();
 		g.drawString(information, 0, 650);
@@ -60,38 +64,37 @@ public class StartGamePanel extends JPanel {
 	}
 	
 	public GameStatus report() {
-		
 		return gameStatus;
 	}
 	
 	public void start() {
-        Graphics g = image.getGraphics();
+        g = image.getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, 1000, 700);
     }
 	
 	protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
+        g2 = (Graphics2D)g;
         g2.setStroke(new BasicStroke(10.0f));
         g2.drawImage(this.image, 0, 0, null);
     }
 	
 	private void drawBarrier(List<GameObject> barrierList) {
-		Graphics2D g = (Graphics2D) image.getGraphics();
-		for (int i = 0; i < barrierList.size(); i++) {
-			GameObject barrier = barrierList.get(i);
+		g2 = (Graphics2D) image.getGraphics();
+		for (numberOfObjects = 0; numberOfObjects < barrierList.size(); numberOfObjects++) {
+			GameObject barrier = barrierList.get(numberOfObjects);
 			barrierImage = barrier.getIcon().getImage();
-			g.drawImage(barrierImage, barrier.getXLocation() - speedUp, barrier.getYLocation(), null);
+			g2.drawImage(barrierImage, barrier.getXLocation() - speedUp, barrier.getYLocation(), null);
 			speedUp = 0;
 		}
 	}
 	
 	private void drawWhizbang() {
-		Graphics2D g = (Graphics2D) image.getGraphics();
+		g2 = (Graphics2D) image.getGraphics();
 		whizbangList = handler.getWhizbangList();
-		for (int i = 0; i < whizbangList.size(); i++) {
-			g.drawRect(whizbangList.get(i).getXLocation(), whizbangList.get(i).getYLocation(), 5, 5);
+		for (numberOfObjects = 0; numberOfObjects < whizbangList.size(); numberOfObjects++) {
+			g2.drawRect(whizbangList.get(numberOfObjects).getXLocation(), whizbangList.get(numberOfObjects).getYLocation(), 5, 5);
 		}
 	}
 	
@@ -120,10 +123,10 @@ public class StartGamePanel extends JPanel {
 	
 	private void drawPlane() {
 		start();
-		Graphics2D g = (Graphics2D) image.getGraphics();
-		g.setColor(Color.YELLOW);
+		g2 = (Graphics2D) image.getGraphics();
+		g2.setColor(Color.YELLOW);
 			planeImage = plane.getIcon().getImage();
-			g.drawImage(planeImage, plane.getXLocation(), plane.getYLocation(), null);
+			g2.drawImage(planeImage, plane.getXLocation(), plane.getYLocation(), null);
 			repaint();
 	}
 	

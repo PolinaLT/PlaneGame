@@ -9,8 +9,6 @@ public interface GameObject {
 		
 	void setXLocation();
 	
-	void setYLocation(VerticalRelocation relocation);
-	
 	int getXLocation();
 		
 	int getYLocation();
