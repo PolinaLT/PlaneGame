@@ -113,8 +113,6 @@ public class GameWindow extends JFrame {
 			switch (gameStatus) {
 			case WIN:
 				infoLabel = new JLabel("Победа!");
-				levelLabel = new JLabel("Цель:" + Integer.toString(bonusStatus) + "/" + Integer.toString(controller.getLevel()));
-				System.out.println(bonusStatus);
 				break;
 			case LOSS:
 				infoLabel = new JLabel("LOSER!");

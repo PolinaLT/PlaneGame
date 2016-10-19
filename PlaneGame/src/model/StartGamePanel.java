@@ -26,7 +26,6 @@ public class StartGamePanel extends JPanel {
 	private Image planeImage;
 	private Image barrierImage;
 	private GameStatus gameStatus = GameStatus.PLAY;
-	private int speedUp = 0;
 	private Level level = new Level();
 	private GameObjectHandler handler;
 	private List<GameObject> bonusList;
@@ -85,8 +84,7 @@ public class StartGamePanel extends JPanel {
 		for (numberOfObjects = 0; numberOfObjects < barrierList.size(); numberOfObjects++) {
 			GameObject barrier = barrierList.get(numberOfObjects);
 			barrierImage = barrier.getIcon().getImage();
-			g2.drawImage(barrierImage, barrier.getXLocation() - speedUp, barrier.getYLocation(), null);
-			speedUp = 0;
+			g2.drawImage(barrierImage, barrier.getXLocation(), barrier.getYLocation(), null);
 		}
 	}
 	

@@ -17,9 +17,9 @@ public class MainWindow extends JPanel {
 	private JFrame mainFrame = new JFrame("Plane");
 	private JPanel mainPanel = new JPanel();
 	private JPanel menuPanel = new JPanel();
-	private Controller controller = new Controller();
 	private GameWindow gameWindow;
 	private LevelReportWindow window;
+	private InfoWindow infoWindow;
 	
 	public MainWindow() {
 		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -62,7 +62,7 @@ public class MainWindow extends JPanel {
 		
 		restart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					controller.restartHistory();
+				infoWindow = new InfoWindow();
 			}
 		});
 		
