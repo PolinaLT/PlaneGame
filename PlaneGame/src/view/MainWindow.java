@@ -18,7 +18,7 @@ public class MainWindow extends JPanel {
 	private JPanel mainPanel = new JPanel();
 	private JPanel menuPanel = new JPanel();
 	private GameWindow gameWindow;
-	private LevelReportWindow window;
+	private StatisticsWindow window;
 	private InfoWindow infoWindow;
 	
 	public MainWindow() {
@@ -53,7 +53,7 @@ public class MainWindow extends JPanel {
 		results.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					window = new LevelReportWindow();
+					window = new StatisticsWindow();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

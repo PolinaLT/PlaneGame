@@ -96,7 +96,7 @@ public class StartGamePanel extends JPanel {
 		}
 	}
 	
-	private void drawCloud() {
+	private void draw() {
 		repaint();
 		
 		handler = new GameObjectHandler();
@@ -109,13 +109,13 @@ public class StartGamePanel extends JPanel {
 
 	public void startGame() {
 		handler = new GameObjectHandler();
-		drawCloud();
+		draw();
 		newTimer = new TimerHandler();
 	}
 	
 	public void nextGame() {
 		handler = new GameObjectHandler();
-		drawCloud();
+		draw();
 		newTimer.restart();
 	}
 	

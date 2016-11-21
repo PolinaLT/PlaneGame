@@ -30,11 +30,7 @@ public class InfoWindow {
 		agree.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.restartHistory();
-				infoPanel.removeAll();
-				infoPanel.add(new JLabel("Прогресс был успешно сброшен"));
-				infoPanel.repaint();
-				infoFrame.repaint();
-				infoFrame.revalidate();
+				addInfo();
 			}
 		});
 		
@@ -44,9 +40,16 @@ public class InfoWindow {
 			}
 		});
 		
+		
+	}
+	
+	private void addInfo() {
+		infoPanel.removeAll();
+		infoPanel.add(new JLabel("Прогресс был успешно сброшен"));
+		infoPanel.repaint();
+		infoFrame.repaint();
+		infoFrame.revalidate();
 		infoFrame.add(infoPanel);
-		
 		infoFrame.setVisible(true);
-		
 	}
 }

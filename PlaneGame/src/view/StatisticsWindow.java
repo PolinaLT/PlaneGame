@@ -12,14 +12,14 @@ import javax.swing.WindowConstants;
 
 import controller.Controller;
 
-public class LevelReportWindow {
+public class StatisticsWindow {
 	private JFrame reportFrame = new JFrame();
 	private JPanel reportPanel;
 	private JLabel reportLabel;
 	private List<String> info;
 	private Controller controller = new Controller();
 	
-	public LevelReportWindow() throws IOException {
+	public StatisticsWindow() throws IOException {
 		reportFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		info = controller.getLevelReport();
@@ -30,8 +30,11 @@ public class LevelReportWindow {
 		reportPanel = new JPanel();
 		reportFrame.add(reportPanel);
 		
-		
-		
+		genStatistics();
+		reportFrame.setVisible(true);
+	}
+	
+	private void genStatistics() {
 		for (int i = 1; i < info.size(); i+=2) {
 			reportLabel = new JLabel("Уровень: " + info.get(i - 1));
 			reportPanel.add(reportLabel);
@@ -44,6 +47,5 @@ public class LevelReportWindow {
 			reportPanel.add(reportLabel);
 		}
 		
-		reportFrame.setVisible(true);
 	}
 }
